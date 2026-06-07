@@ -1,0 +1,9 @@
+{
+  "name": "AY BHATTI FARM",
+  "short_name": "AY Mangoes",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF8E7",
+  "theme_color": "#2E7D32",
+  "description": "Fresh Multani mangoes delivered across Pakistan."
+}

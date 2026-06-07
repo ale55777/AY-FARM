@@ -1,0 +1,96 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  scroll-behavior: smooth;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #fff8e7;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+::selection {
+  background: #ffc72c;
+  color: #173322;
+}
+
+.glass-panel {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 2rem;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 80px rgba(23, 51, 34, 0.26);
+  backdrop-filter: blur(18px);
+}
+
+.footer-link {
+  color: rgba(255, 255, 255, 0.74);
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.footer-link:hover {
+  color: #ffc72c;
+  transform: translateX(2px);
+}
+
+.form-label {
+  margin-bottom: 0.5rem;
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(23, 51, 34, 0.7);
+}
+
+.form-field {
+  min-height: 3.25rem;
+  width: 100%;
+  border-radius: 1rem;
+  border: 1px solid rgba(46, 125, 50, 0.16);
+  background: #fff8e7;
+  padding: 0.9rem 1rem;
+  color: #173322;
+  outline: none;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.form-field:focus {
+  border-color: rgba(46, 125, 50, 0.55);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(255, 199, 44, 0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
