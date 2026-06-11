@@ -19,11 +19,15 @@ export default function Footer() {
             Family-owned Multan mango farm delivering fresh, naturally ripened Sindhri, Anwar Ratol, Dusehri and Chaunsa mangoes across Pakistan.
           </p>
           <div className="mt-5 flex gap-3">
-            {[Facebook, Instagram, Youtube].map((Icon, index) => (
-              <a key={index} aria-label="Social link" href="#" className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-mango transition hover:bg-mango hover:text-ink">
-                <Icon className="h-4 w-4" />
-              </a>
-            ))}
+            <a aria-label="Facebook" href="#" className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-mango transition hover:bg-mango hover:text-ink">
+              <Facebook className="h-4 w-4" />
+            </a>
+            <a aria-label="Instagram" href="https://www.instagram.com/ay.farms/" target="_blank" rel="noreferrer" className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-mango transition hover:bg-mango hover:text-ink">
+              <Instagram className="h-4 w-4" />
+            </a>
+            <a aria-label="Youtube" href="#" className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-mango transition hover:bg-mango hover:text-ink">
+              <Youtube className="h-4 w-4" />
+            </a>
           </div>
         </div>
 

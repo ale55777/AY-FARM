@@ -19,14 +19,19 @@ import {
   Users
 } from "lucide-react";
 
+import sindhriImg from "../assets/images/sindhri.png";
+import anwarRatolImg from "../assets/images/anwar.png";
+import dusehriImg from "../assets/images/dusehri.png";
+import chaunsaImg from "../assets/images/chaunsa.png";
+
 export const business = {
-  name: "AY BHATTI FARM",
+  name: "A.Y BHATTI FARM",
   city: "Multan, Pakistan",
-  phone: "+92 315 1438370",
-  whatsapp: "923151438370",
+  phone: "+92 3041659109",
+  whatsapp: "92 3151438370",
   email: "orders@aybhattifarm.com",
-  address: "AY BHATTI FARM, Mango Orchard Belt, Multan, Punjab, Pakistan",
-  website: "https://aybhattifarm.com",
+  address: "A.Y BHATTI FARM, Multan, Punjab, Pakistan",
+  website: "https://ayfarm.com",
   defaultMessage:
     "Assalam-o-Alaikum,\n\nI would like to order fresh mangoes from AY BHATTI FARM.\n\nPlease share available mango varieties, prices, and delivery details."
 };
@@ -61,7 +66,7 @@ export const mangoes = [
   {
     title: "Sindhri Mango",
     subtitle: "The King of Early Season Mangoes",
-    image: "/images/sindhri.png",
+    image: sindhriImg,
     description:
       "Sindhri mangoes are famous for their large size, golden-yellow color, smooth texture and naturally sweet taste. Their juicy flesh and rich aroma make them one of Pakistan's most loved mango varieties.",
     taste: ["Sweet", "Juicy", "Mild Fiber", "Rich Aroma"],
@@ -74,7 +79,7 @@ export const mangoes = [
   {
     title: "Anwar Ratol Mango",
     subtitle: "Small Size, Luxury Flavor",
-    image: "/images/anwar-ratol.png",
+    image: anwarRatolImg,
     description:
       "Anwar Ratol is one of Pakistan's most luxurious mango varieties. Known for its small size, intense sweetness and unforgettable fragrance, it is considered a premium mango by mango lovers worldwide.",
     taste: ["Extremely Sweet", "Highly Aromatic", "Soft Flesh", "Premium Flavor"],
@@ -87,7 +92,7 @@ export const mangoes = [
   {
     title: "Dusehri Mango",
     subtitle: "Balanced, Smooth and Refreshing",
-    image: "/images/dusehri.png",
+    image: dusehriImg,
     description:
       "Dusehri mangoes offer a perfect balance of sweetness, juiciness and smooth texture. Their elongated shape and delicious flavor make them a favorite among mango enthusiasts.",
     taste: ["Sweet", "Smooth Texture", "Juicy", "Refreshing Flavor"],
@@ -100,7 +105,7 @@ export const mangoes = [
   {
     title: "Chaunsa Mango",
     subtitle: "Pakistan's Most Famous Mango",
-    image: "/images/chaunsa.png",
+    image: chaunsaImg,
     description:
       "Chaunsa is widely regarded as Pakistan's most famous mango variety. Loved for its exceptional sweetness, rich flavor and juicy pulp, Chaunsa represents the true taste of Pakistani mangoes.",
     taste: ["Extremely Sweet", "Very Juicy", "Rich Flavor", "Soft Texture"],
@@ -133,9 +138,9 @@ export const gallery = [
   { src: "/images/orchard-rows.png", alt: "Green mango farm rows" },
   { src: "/images/packing.png", alt: "Fresh fruit packing process" },
   { src: "/images/boxes.png", alt: "Packed produce boxes" },
-  { src: "/images/anwar-ratol.png", alt: "Premium mango variety" },
-  { src: "/images/dusehri.png", alt: "Mangoes ready for delivery" },
-  { src: "/images/chaunsa.png", alt: "Juicy mango pulp" }
+  { src: anwarRatolImg, alt: "Premium mango variety" },
+  { src: dusehriImg, alt: "Mangoes ready for delivery" },
+  { src: chaunsaImg, alt: "Juicy mango pulp" }
 ];
 
 export const testimonials = [

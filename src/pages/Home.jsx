@@ -154,6 +154,7 @@ function Hero() {
             alt="Fresh Chaunsa mangoes in premium box"
             className="aspect-[4/5] w-full rounded-[1.5rem] object-cover"
             loading="eager"
+            style={{ display: 'block', width: '100%' }}
           />
           <div className="absolute -bottom-6 left-6 right-6 rounded-3xl bg-white p-5 text-ink shadow-premium">
             <div className="flex items-center justify-between gap-4">
@@ -241,8 +242,14 @@ function MangoCard({ mango, reverse }) {
       className="overflow-hidden rounded-[2rem] border border-orchard/10 bg-cream shadow-premium"
     >
       <div className={`grid gap-0 lg:grid-cols-2 ${reverse ? "lg:[&>div:first-child]:order-2" : ""}`}>
-        <div className="relative min-h-[340px] overflow-hidden">
-          <img src={mango.image} alt={`${mango.title} from AY BHATTI FARM`} className="h-full min-h-[340px] w-full object-cover transition duration-700 hover:scale-105" loading="lazy" />
+        <div className="relative overflow-hidden" style={{ minHeight: '340px' }}>
+          <img
+            src={mango.image}
+            alt={`${mango.title} from AY BHATTI FARM`}
+            className="absolute inset-0 w-full h-full object-cover transition duration-700 hover:scale-105"
+            loading="lazy"
+            style={{ display: 'block' }}
+          />
           <div className="absolute left-5 top-5 rounded-full bg-white/88 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-orchard backdrop-blur">
             {mango.season}
           </div>
