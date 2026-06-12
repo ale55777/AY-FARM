@@ -90,23 +90,21 @@ export default function Home() {
 function Hero() {
   return (
     <section className="relative min-h-screen overflow-hidden bg-ink pt-28 text-white">
+      {/* Full hero background — hero-orchard.jpeg covers the complete section */}
       <div className="absolute inset-0">
-        <div className="grid h-full grid-cols-1 md:grid-cols-3">
-          {heroImages.map((image, index) => (
-            <motion.img
-              key={image}
-              src={image}
-              alt={index === 0 ? "Fresh ripe mangoes" : index === 1 ? "Farmers harvesting produce" : "Green orchard in Pakistan"}
-              className="h-full min-h-[260px] w-full object-cover opacity-70"
-              initial={{ scale: 1.08, opacity: 0 }}
-              animate={{ scale: 1, opacity: 0.7 }}
-              transition={{ duration: 1.2, delay: index * 0.12 }}
-              loading={index === 0 ? "eager" : "lazy"}
-            />
-          ))}
-        </div>
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(23,51,34,0.96),rgba(23,51,34,0.76),rgba(23,51,34,0.28))]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_24%,rgba(255,199,44,0.34),transparent_28%)]" />
+        <motion.img
+          src="/images/hero-orchard.jpeg"
+          alt="AY BHATTI FARM lush mango orchard in Multan Pakistan"
+          className="h-full w-full object-cover"
+          initial={{ scale: 1.06, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.4, ease: "easeOut" }}
+          loading="eager"
+        />
+        {/* Deep gradient overlay for text readability */}
+        <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(10,30,18,0.96)_0%,rgba(10,30,18,0.82)_45%,rgba(10,30,18,0.45)_75%,rgba(10,30,18,0.28)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_20%,rgba(255,199,44,0.28),transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_80%,rgba(23,51,34,0.6),transparent_60%)]" />
       </div>
 
       <FloatingMango className="left-[8%] top-[26%]" delay={0.2} />
@@ -441,43 +439,176 @@ function DeliveryProcess() {
 
 function GallerySection() {
   const [active, setActive] = useState(null);
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [filter, setFilter] = useState("All");
+
+  const tags = ["All", ...Array.from(new Set(gallery.map((g) => g.tag)))];
+  const filtered = filter === "All" ? gallery : gallery.filter((g) => g.tag === filter);
+
+  const openItem = (item) => {
+    setActive(item);
+    setActiveIdx(gallery.indexOf(item));
+  };
+  const goPrev = (e) => {
+    e.stopPropagation();
+    const idx = (activeIdx - 1 + gallery.length) % gallery.length;
+    setActive(gallery[idx]);
+    setActiveIdx(idx);
+  };
+  const goNext = (e) => {
+    e.stopPropagation();
+    const idx = (activeIdx + 1) % gallery.length;
+    setActive(gallery[idx]);
+    setActiveIdx(idx);
+  };
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (!active) return;
+      if (e.key === "Escape") setActive(null);
+      if (e.key === "ArrowLeft") { const idx = (activeIdx - 1 + gallery.length) % gallery.length; setActive(gallery[idx]); setActiveIdx(idx); }
+      if (e.key === "ArrowRight") { const idx = (activeIdx + 1) % gallery.length; setActive(gallery[idx]); setActiveIdx(idx); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [active, activeIdx]);
+
   return (
     <section id="gallery" className="bg-white px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <SectionHeading
-          eyebrow="Image gallery"
-          title="Orchards, harvesting, packing and fresh mango close-ups"
-          text="A visual look at the freshness and care customers expect from a premium mango farm."
+          eyebrow="Farm Gallery"
+          title="From orchard to your doorstep"
+          text="A visual journey through AY BHATTI FARM — mangoes, harvest, orchard and packing in one place."
         />
-        <div className="mt-12 columns-1 gap-5 sm:columns-2 lg:columns-3">
-          {gallery.map((item, index) => (
+
+        {/* Filter tabs */}
+        <div className="mt-10 flex flex-wrap justify-center gap-2">
+          {tags.map((tag) => (
             <button
-              key={item.src}
+              key={tag}
               type="button"
-              onClick={() => setActive(item)}
-              className="group mb-5 block w-full break-inside-avoid overflow-hidden rounded-3xl"
-              aria-label={`Open ${item.alt}`}
+              onClick={() => setFilter(tag)}
+              className={`rounded-full px-5 py-2 text-sm font-black transition-all duration-200 ${
+                filter === tag
+                  ? "bg-orchard text-white shadow-md scale-105"
+                  : "border border-orchard/20 bg-cream text-ink hover:border-orchard/40 hover:bg-orchard/8"
+              }`}
             >
-              <img src={item.src} alt={item.alt} className={`${index % 3 === 0 ? "aspect-[4/5]" : "aspect-[5/3]"} w-full object-cover transition duration-700 group-hover:scale-105`} loading="lazy" />
-              <span className="pointer-events-none absolute hidden" />
+              {tag}
             </button>
           ))}
         </div>
+
+        {/* Masonry grid */}
+        <div className="mt-10 columns-1 gap-4 sm:columns-2 lg:columns-3 xl:columns-4">
+          <AnimatePresence>
+            {filtered.map((item, index) => (
+              <motion.button
+                key={item.src}
+                layout
+                type="button"
+                onClick={() => openItem(item)}
+                aria-label={`View: ${item.alt}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                className="group relative mb-4 block w-full break-inside-avoid overflow-hidden rounded-2xl shadow-md"
+              >
+                <img
+                  src={item.src}
+                  alt={item.alt}
+                  className={`w-full object-cover transition-transform duration-500 group-hover:scale-110 ${
+                    index % 5 === 0 ? "aspect-[3/4]" :
+                    index % 5 === 1 ? "aspect-[4/3]" :
+                    index % 5 === 2 ? "aspect-square" :
+                    index % 5 === 3 ? "aspect-[4/3]" : "aspect-[3/4]"
+                  }`}
+                  loading="lazy"
+                />
+                {/* Hover overlay */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-ink/55 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <div className="rounded-full bg-white/20 p-2.5 backdrop-blur-sm">
+                    <Eye className="h-5 w-5 text-white" />
+                  </div>
+                  <p className="mx-3 text-center text-xs font-bold text-white/90 leading-5 line-clamp-2">{item.alt}</p>
+                </div>
+                {/* Tag badge */}
+                <div className="absolute left-2.5 top-2.5 rounded-full bg-black/40 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white/90 backdrop-blur-sm">
+                  {item.tag}
+                </div>
+              </motion.button>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        {filtered.length === 0 && (
+          <p className="mt-12 text-center text-ink/40 font-bold">No images in this category.</p>
+        )}
       </div>
+
+      {/* Lightbox */}
       <AnimatePresence>
         {active && (
-          <motion.div className="fixed inset-0 z-[80] grid place-items-center bg-ink/88 p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <button type="button" aria-label="Close gallery image" onClick={() => setActive(null)} className="absolute right-5 top-5 grid h-12 w-12 place-items-center rounded-full bg-white text-ink">
+          <motion.div
+            className="fixed inset-0 z-[80] flex items-center justify-center bg-ink/92 p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActive(null)}
+          >
+            {/* Close */}
+            <button
+              type="button"
+              aria-label="Close gallery"
+              onClick={() => setActive(null)}
+              className="absolute right-4 top-4 z-10 grid h-11 w-11 place-items-center rounded-full bg-white/15 text-white backdrop-blur hover:bg-white/28 transition"
+            >
               <X className="h-5 w-5" />
             </button>
-            <motion.img
-              src={active.src}
-              alt={active.alt}
-              className="max-h-[84vh] w-full max-w-5xl rounded-3xl object-contain shadow-premium"
-              initial={{ scale: 0.94, opacity: 0 }}
+            {/* Prev */}
+            <button
+              type="button"
+              aria-label="Previous image"
+              onClick={goPrev}
+              className="absolute left-4 top-1/2 z-10 -translate-y-1/2 grid h-11 w-11 place-items-center rounded-full bg-white/15 text-white backdrop-blur hover:bg-white/28 transition"
+            >
+              <ArrowRight className="h-5 w-5 rotate-180" />
+            </button>
+            {/* Next */}
+            <button
+              type="button"
+              aria-label="Next image"
+              onClick={goNext}
+              className="absolute right-4 top-1/2 z-10 -translate-y-1/2 grid h-11 w-11 place-items-center rounded-full bg-white/15 text-white backdrop-blur hover:bg-white/28 transition"
+            >
+              <ArrowRight className="h-5 w-5" />
+            </button>
+            {/* Image container */}
+            <motion.div
+              onClick={(e) => e.stopPropagation()}
+              className="flex max-h-[92vh] max-w-5xl w-full flex-col items-center gap-4"
+              initial={{ scale: 0.93, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.94, opacity: 0 }}
-            />
+              exit={{ scale: 0.93, opacity: 0 }}
+              transition={{ duration: 0.22 }}
+            >
+              <img
+                src={active.src}
+                alt={active.alt}
+                className="max-h-[78vh] w-full rounded-2xl object-contain shadow-2xl"
+              />
+              <div className="flex w-full items-center justify-between gap-3 px-1">
+                <span className="rounded-full bg-white/15 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-white/90 backdrop-blur">
+                  {active.tag}
+                </span>
+                <p className="flex-1 text-center text-sm font-bold text-white/75">{active.alt}</p>
+                <span className="text-xs font-bold text-white/45 tabular-nums">
+                  {activeIdx + 1} / {gallery.length}
+                </span>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -24,6 +24,19 @@ import anwarRatolImg from "../assets/images/anwar.png";
 import dusehriImg from "../assets/images/dusehri.png";
 import chaunsaImg from "../assets/images/chaunsa.png";
 
+import gallery1 from "../assets/images/1.jfif";
+import gallery2 from "../assets/images/2.jfif";
+import gallery3 from "../assets/images/3.jfif";
+import gallery4 from "../assets/images/4.jfif";
+import gallery5 from "../assets/images/5.jfif";
+import gallery6 from "../assets/images/6.jfif";
+import gallery7 from "../assets/images/7.jfif";
+import gallery8 from "../assets/images/8.jfif";
+import gallery9 from "../assets/images/9.jfif";
+import gallery10 from "../assets/images/10.jfif";
+import gallery11 from "../assets/images/11.jfif";
+import gallery12 from "../assets/images/12.jfif";
+
 export const business = {
   name: "A.Y BHATTI FARM",
   city: "Multan, Pakistan",
@@ -50,7 +63,7 @@ export const navLinks = [
 export const heroImages = [
   "/images/hero-mangoes.png",
   "/images/hero-harvest.png",
-  "/images/hero-orchard.png"
+  "/images/hero-orchard.jpeg"
 ];
 
 export const features = [
@@ -133,14 +146,18 @@ export const processSteps = [
 ];
 
 export const gallery = [
-  { src: "/images/mango-close.png", alt: "Fresh ripe mango close-up" },
-  { src: "/images/hero-harvest.png", alt: "Farmers harvesting in orchard" },
-  { src: "/images/orchard-rows.png", alt: "Green mango farm rows" },
-  { src: "/images/packing.png", alt: "Fresh fruit packing process" },
-  { src: "/images/boxes.png", alt: "Packed produce boxes" },
-  { src: anwarRatolImg, alt: "Premium mango variety" },
-  { src: dusehriImg, alt: "Mangoes ready for delivery" },
-  { src: chaunsaImg, alt: "Juicy mango pulp" }
+  { src: gallery1,  alt: "Fresh ripe mangoes from AY BHATTI FARM",        tag: "Mangoes" },
+  { src: gallery2,  alt: "Premium mango varieties close-up",               tag: "Mangoes" },
+  { src: gallery3,  alt: "Mango harvest in Multan orchard",                tag: "Orchard" },
+  { src: gallery4,  alt: "Freshly picked mangoes ready for packing",       tag: "Harvest" },
+  { src: gallery5,  alt: "Mango orchard rows in full season",              tag: "Orchard" },
+  { src: gallery6,  alt: "Natural ripening process at the farm",           tag: "Farm" },
+  { src: gallery7,  alt: "Quality inspection of premium mangoes",          tag: "Quality" },
+  { src: gallery8,  alt: "Carefully packed mango gift boxes",              tag: "Packaging" },
+  { src: gallery9,  alt: "Mango varieties sorted by grade",                tag: "Quality" },
+  { src: gallery10, alt: "Farm workers harvesting mangoes",                tag: "Harvest" },
+  { src: gallery11, alt: "Fresh mangoes ready for nationwide delivery",    tag: "Delivery" },
+  { src: gallery12, alt: "AY BHATTI FARM mango orchard aerial view",       tag: "Orchard" }
 ];
 
 export const testimonials = [
