@@ -138,7 +138,7 @@ export default function Contact() {
                 </Button>
                 {status === "success" && (
                   <p className="mt-4 rounded-2xl bg-green-50 border border-green-200 px-4 py-3 text-sm font-bold text-green-700">
-                    ✅ Thank you! Your inquiry has been received. We will get back to you soon.
+                    ✅ Your order has been sent! We will reach you soon.
                   </p>
                 )}
                 {status === "error" && (
