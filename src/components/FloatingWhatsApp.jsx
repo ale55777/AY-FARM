@@ -1,9 +1,10 @@
-import { Instagram, MessageCircle } from "lucide-react";
+import { Instagram, MessageCircle, Mail } from "lucide-react";
 import { motion } from "framer-motion";
-import { whatsappLink } from "../data/siteData.js";
+import { whatsappLink, business } from "../data/siteData.js";
 
 const INSTAGRAM_URL = "https://www.instagram.com/ay.farms/";
-const WHATSAPP_URL = whatsappLink();
+const WHATSAPP_URL  = whatsappLink();
+const GMAIL_URL     = `mailto:${business.email}?subject=${encodeURIComponent("Mango Order Inquiry — AY BHATTI FARM")}&body=${encodeURIComponent("Assalam-o-Alaikum,\n\nI would like to place an order for fresh mangoes.\n\nName:\nPhone:\nCity:\nVariety:\nQuantity:\n\nThank you.")}`;
 
 function FloatingBtn({ href, label, delay, className, ringColor, children }) {
   return (
@@ -14,7 +15,7 @@ function FloatingBtn({ href, label, delay, className, ringColor, children }) {
       </span>
       <motion.a
         href={href}
-        target="_blank"
+        target={href.startsWith("mailto") ? "_self" : "_blank"}
         rel="noreferrer"
         aria-label={label}
         className={`relative grid h-14 w-14 place-items-center rounded-full text-white shadow-premium ${className}`}
@@ -38,6 +39,7 @@ function FloatingBtn({ href, label, delay, className, ringColor, children }) {
 export default function FloatingWhatsApp() {
   return (
     <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
+
       {/* Instagram */}
       <FloatingBtn
         href={INSTAGRAM_URL}
@@ -47,6 +49,17 @@ export default function FloatingWhatsApp() {
         ringColor="bg-[#dc2743]"
       >
         <Instagram className="h-6 w-6" />
+      </FloatingBtn>
+
+      {/* Gmail */}
+      <FloatingBtn
+        href={GMAIL_URL}
+        label="Email Your Order"
+        delay={0.9}
+        className="bg-[#EA4335]"
+        ringColor="bg-[#EA4335]"
+      >
+        <Mail className="h-6 w-6" />
       </FloatingBtn>
 
       {/* WhatsApp */}
@@ -59,6 +72,7 @@ export default function FloatingWhatsApp() {
       >
         <MessageCircle className="h-7 w-7" />
       </FloatingBtn>
+
     </div>
   );
 }
