@@ -88,7 +88,7 @@ export default function Contact() {
                   For urgent seasonal orders, send your mango variety, quantity and delivery city on WhatsApp.
                 </p>
                 <div className="mt-8 space-y-4">
-                  <ContactItem icon={MessageCircle} label="WhatsApp" value={business.phone} href={whatsappLink()} />
+                  <ContactItem icon={MessageCircle} label="WhatsApp" value={`+${business.whatsapp}`} href={whatsappLink()} />
                   <ContactItem icon={Phone} label="Phone" value={business.phone} href={`tel:${business.phone.replace(/\s/g, "")}`} />
                   <ContactItem icon={Mail} label="Email" value={business.email} href={`mailto:${business.email}`} />
                   <ContactItem icon={MapPin} label="Farm Address" value={business.address} />
