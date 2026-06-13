@@ -1,21 +1,21 @@
 import { Instagram, MessageCircle, Mail } from "lucide-react";
 import { motion } from "framer-motion";
-import { whatsappLink, business } from "../data/siteData.js";
+import { Link } from "react-router-dom";
+import { whatsappLink } from "../data/siteData.js";
 
 const INSTAGRAM_URL = "https://www.instagram.com/ay.farms/";
 const WHATSAPP_URL  = whatsappLink();
-const GMAIL_URL     = `mailto:${business.email}?subject=${encodeURIComponent("Mango Order Inquiry — AY BHATTI FARM")}&body=${encodeURIComponent("Assalam-o-Alaikum,\n\nI would like to place an order for fresh mangoes.\n\nName:\nPhone:\nCity:\nVariety:\nQuantity:\n\nThank you.")}`;
 
+/* ── External link button (WhatsApp, Instagram) ── */
 function FloatingBtn({ href, label, delay, className, ringColor, children }) {
   return (
     <div className="group relative flex items-center justify-end">
-      {/* Tooltip */}
       <span className="pointer-events-none absolute right-16 whitespace-nowrap rounded-lg bg-ink/90 px-3 py-1.5 text-xs font-bold text-white opacity-0 shadow-lg transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 translate-x-1 backdrop-blur">
         {label}
       </span>
       <motion.a
         href={href}
-        target={href.startsWith("mailto") ? "_self" : "_blank"}
+        target="_blank"
         rel="noreferrer"
         aria-label={label}
         className={`relative grid h-14 w-14 place-items-center rounded-full text-white shadow-premium ${className}`}
@@ -25,13 +25,39 @@ function FloatingBtn({ href, label, delay, className, ringColor, children }) {
         whileHover={{ y: -3, scale: 1.08 }}
         whileTap={{ scale: 0.95 }}
       >
-        {/* Pulse ring */}
         <span
           className={`absolute inset-0 rounded-full animate-ping opacity-25 ${ringColor}`}
           style={{ animationDuration: "2.4s" }}
         />
         {children}
       </motion.a>
+    </div>
+  );
+}
+
+/* ── Internal link button (Contact form) ── */
+function FloatingInternalBtn({ to, label, delay, className, ringColor, children }) {
+  return (
+    <div className="group relative flex items-center justify-end">
+      <span className="pointer-events-none absolute right-16 whitespace-nowrap rounded-lg bg-ink/90 px-3 py-1.5 text-xs font-bold text-white opacity-0 shadow-lg transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 translate-x-1 backdrop-blur">
+        {label}
+      </span>
+      <motion.div
+        className={`relative grid h-14 w-14 place-items-center rounded-full text-white shadow-premium cursor-pointer ${className}`}
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay, type: "spring", stiffness: 200, damping: 14 }}
+        whileHover={{ y: -3, scale: 1.08 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <span
+          className={`absolute inset-0 rounded-full animate-ping opacity-25 ${ringColor}`}
+          style={{ animationDuration: "2.4s" }}
+        />
+        <Link to={to} aria-label={label} className="absolute inset-0 grid place-items-center text-white">
+          {children}
+        </Link>
+      </motion.div>
     </div>
   );
 }
@@ -51,16 +77,16 @@ export default function FloatingWhatsApp() {
         <Instagram className="h-6 w-6" />
       </FloatingBtn>
 
-      {/* Gmail */}
-      <FloatingBtn
-        href={GMAIL_URL}
-        label="Email Your Order"
+      {/* Order via Contact Form */}
+      <FloatingInternalBtn
+        to="/contact"
+        label="Send Order Request"
         delay={0.9}
         className="bg-[#EA4335]"
         ringColor="bg-[#EA4335]"
       >
         <Mail className="h-6 w-6" />
-      </FloatingBtn>
+      </FloatingInternalBtn>
 
       {/* WhatsApp */}
       <FloatingBtn
