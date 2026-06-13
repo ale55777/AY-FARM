@@ -1,6 +1,6 @@
 import { Instagram, MessageCircle, Mail } from "lucide-react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { whatsappLink } from "../data/siteData.js";
 
 const INSTAGRAM_URL = "https://www.instagram.com/ay.farms/";
@@ -35,15 +35,17 @@ function FloatingBtn({ href, label, delay, className, ringColor, children }) {
   );
 }
 
-/* ── Internal link button (Contact form) ── */
-function FloatingInternalBtn({ to, label, delay, className, ringColor, children }) {
+/* ── Internal link button (Contact form) — scrolls to top ── */
+function FloatingInternalBtn({ onClick, label, delay, className, ringColor, children }) {
   return (
     <div className="group relative flex items-center justify-end">
       <span className="pointer-events-none absolute right-16 whitespace-nowrap rounded-lg bg-ink/90 px-3 py-1.5 text-xs font-bold text-white opacity-0 shadow-lg transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 translate-x-1 backdrop-blur">
         {label}
       </span>
-      <motion.div
-        className={`relative grid h-14 w-14 place-items-center rounded-full text-white shadow-premium cursor-pointer ${className}`}
+      <motion.button
+        onClick={onClick}
+        aria-label={label}
+        className={`relative grid h-14 w-14 place-items-center rounded-full text-white shadow-premium cursor-pointer border-0 ${className}`}
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay, type: "spring", stiffness: 200, damping: 14 }}
@@ -54,15 +56,20 @@ function FloatingInternalBtn({ to, label, delay, className, ringColor, children 
           className={`absolute inset-0 rounded-full animate-ping opacity-25 ${ringColor}`}
           style={{ animationDuration: "2.4s" }}
         />
-        <Link to={to} aria-label={label} className="absolute inset-0 grid place-items-center text-white">
-          {children}
-        </Link>
-      </motion.div>
+        {children}
+      </motion.button>
     </div>
   );
 }
 
 export default function FloatingWhatsApp() {
+  const navigate = useNavigate();
+
+  const handleEmailClick = () => {
+    navigate("/contact");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
 
@@ -77,9 +84,9 @@ export default function FloatingWhatsApp() {
         <Instagram className="h-6 w-6" />
       </FloatingBtn>
 
-      {/* Order via Contact Form */}
+      {/* Order via Contact Form — scrolls to top */}
       <FloatingInternalBtn
-        to="/contact"
+        onClick={handleEmailClick}
         label="Send Order Request"
         delay={0.9}
         className="bg-[#EA4335]"
