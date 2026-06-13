@@ -134,7 +134,7 @@ export default function Contact() {
                   />
                 </label>
                 <Button type="submit" variant="dark" icon={Send} className="mt-6 w-full" disabled={sending}>
-                  {sending ? "Sending…" : "Send Inquiry"}
+                  {sending ? "Sending…" : "Send Order"}
                 </Button>
                 {status === "success" && (
                   <p className="mt-4 rounded-2xl bg-green-50 border border-green-200 px-4 py-3 text-sm font-bold text-green-700">
