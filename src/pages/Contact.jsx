@@ -1,4 +1,3 @@
-import emailjs from "@emailjs/browser";
 import { motion } from "framer-motion";
 import { Mail, MapPin, MessageCircle, Phone, Send } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
@@ -7,13 +6,6 @@ import SEO from "../components/SEO.jsx";
 import SectionHeading from "../components/SectionHeading.jsx";
 import WhatsAppCTA from "../components/WhatsAppCTA.jsx";
 import { business, mangoes, whatsappLink } from "../data/siteData.js";
-
-// ─── EmailJS credentials ────────────────────────────────────────────────────
-// Replace these three values with your own from https://www.emailjs.com
-const EMAILJS_SERVICE_ID  = "service_fg3grvv";
-const EMAILJS_TEMPLATE_ID = "template_53jjdaj";
-const EMAILJS_PUBLIC_KEY  = "GKAIVKzZcR3U9qLZv";
-// ────────────────────────────────────────────────────────────────────────────
 
 export default function Contact() {
   const [status, setStatus]   = useState("");
@@ -37,26 +29,33 @@ export default function Contact() {
     []
   );
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     setSending(true);
     setStatus("");
 
-    try {
-      await emailjs.sendForm(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        formRef.current,
-        { publicKey: EMAILJS_PUBLIC_KEY }
-      );
-      setStatus("success");
-      formRef.current.reset();
-    } catch (err) {
-      console.error("EmailJS error:", err);
-      setStatus("error");
-    } finally {
-      setSending(false);
-    }
+    const data = new FormData(formRef.current);
+    const name     = data.get("name")     || "";
+    const phone    = data.get("phone")    || "";
+    const city     = data.get("city")     || "";
+    const interest = data.get("interest") || "";
+    const message  = data.get("message")  || "";
+
+    const text =
+      `🥭 *New Order – AY BHATTI FARM Website*\n\n` +
+      `*Name:* ${name}\n` +
+      `*Phone:* ${phone}\n` +
+      `*City:* ${city}\n` +
+      `*Interest:* ${interest}\n` +
+      `*Message:* ${message}`;
+
+    const waNumber = business.whatsapp.replace(/\s/g, "");
+    const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`;
+
+    window.open(waUrl, "_blank", "noreferrer");
+    setStatus("success");
+    formRef.current.reset();
+    setSending(false);
   };
 
   return (
@@ -138,12 +137,7 @@ export default function Contact() {
                 </Button>
                 {status === "success" && (
                   <p className="mt-4 rounded-2xl bg-green-50 border border-green-200 px-4 py-3 text-sm font-bold text-green-700">
-                    ✅ Your order has been sent! We will reach you soon.
-                  </p>
-                )}
-                {status === "error" && (
-                  <p className="mt-4 rounded-2xl bg-red-50 border border-red-200 px-4 py-3 text-sm font-bold text-red-700">
-                    ❌ Could not send your message. Please try again or contact us on WhatsApp.
+                    ✅ WhatsApp opened with your order! Complete the chat to confirm.
                   </p>
                 )}
               </motion.form>
