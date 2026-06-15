@@ -48,7 +48,9 @@ export default function Contact() {
     const data     = new FormData(formRef.current);
     const name     = (data.get("name")     || "").trim();
     const phone    = (data.get("phone")    || "").trim();
+    const city     = (data.get("city")     || "").trim();
     const interest = (data.get("interest") || "").trim();
+    const message  = (data.get("message")  || "").trim();
 
     try {
       const result = await emailjs.sendForm(EJS_SERVICE, EJS_TEMPLATE, formRef.current, EJS_KEY);
@@ -56,19 +58,22 @@ export default function Contact() {
       setStatus("success");
       formRef.current.reset();
 
-      // ── Auto WhatsApp reply to customer ──────────────────────
+      // ── Auto WhatsApp confirmation to customer ────────────────
       if (phone) {
-        // Normalise to international format (Pakistan default)
-        const digits   = phone.replace(/\D/g, "");
-        const waPhone  = digits.startsWith("92") ? digits
-                       : digits.startsWith("0")  ? "92" + digits.slice(1)
-                       : "92" + digits;
+        const digits  = phone.replace(/\D/g, "");
+        const waPhone = digits.startsWith("92") ? digits
+                      : digits.startsWith("0")  ? "92" + digits.slice(1)
+                      : "92" + digits;
 
         const autoReply =
           `Assalam-o-Alaikum${name ? ` *${name}*` : ""}! 🥭\n\n` +
-          `Thank you for contacting *AY BHATTI FARM*. We have received your inquiry` +
-          `${interest ? ` regarding *${interest}*` : ""}.\n\n` +
-          `We will get back to you shortly with pricing, availability and delivery details.\n\n` +
+          `✅ *Your inquiry has been received at AY BHATTI FARM.*\n\n` +
+          `📋 *Inquiry Summary:*\n` +
+          `• Order Interest: *${interest || "Not specified"}*\n` +
+          `• City: *${city || "Not specified"}*\n` +
+          (message ? `• Note: _${message}_\n` : "") +
+          `\n` +
+          `We will contact you shortly with pricing, availability and delivery details.\n\n` +
           `جزاک اللہ خیرا 🌿\n` +
           `_AY BHATTI FARM — Fresh Mangoes from Multan_`;
 
