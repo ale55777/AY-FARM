@@ -178,7 +178,12 @@ export const faqs = [
   { q: "Can I place bulk orders?", a: "Yes. Bulk and corporate gift box orders can be arranged with advance booking and custom packaging discussions." }
 ];
 
-export const deliveryAreas = ["Lahore", "Karachi", "Islamabad", "Rawalpindi", "Faisalabad", "Multan", "Peshawar", "Quetta"];
+export const deliveryAreas = [
+  "Lahore", "Karachi", "Islamabad", "Rawalpindi", "Faisalabad",
+  "Multan", "Peshawar", "Quetta", "Gujranwala", "Sialkot",
+  "Hyderabad", "Bahawalpur", "Sargodha", "Sukkur", "Larkana",
+  "Sheikhupura", "Rahim Yar Khan", "Jhang", "Gujrat", "Abbottabad"
+];
 
 export const quickCtas = [
   { label: "Order on WhatsApp", href: whatsappLink(), icon: Phone },
