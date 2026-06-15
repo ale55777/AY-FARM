@@ -1,3 +1,4 @@
+import emailjs from "@emailjs/browser";
 import { motion } from "framer-motion";
 import { Mail, MapPin, MessageCircle, Phone, Send } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
@@ -7,9 +8,17 @@ import SectionHeading from "../components/SectionHeading.jsx";
 import WhatsAppCTA from "../components/WhatsAppCTA.jsx";
 import { business, mangoes, whatsappLink } from "../data/siteData.js";
 
+// ── EmailJS credentials ────────────────────────────────────────
+// Template variables expected: {{name}} {{phone}} {{city}} {{interest}} {{message}}
+const EJS_SERVICE  = "service_fg3grvv";
+const EJS_TEMPLATE = "template_j06ebjg";
+const EJS_KEY      = "GKAIVKzZcR3U9qLZv";
+// ───────────────────────────────────────────────────────────────
+
 export default function Contact() {
-  const [status, setStatus]   = useState("");
-  const [sending, setSending] = useState(false);
+  const [status,   setStatus]   = useState("");
+  const [errMsg,   setErrMsg]   = useState("");
+  const [sending,  setSending]  = useState(false);
   const formRef = useRef(null);
 
   const schema = useMemo(
@@ -29,33 +38,25 @@ export default function Contact() {
     []
   );
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setSending(true);
     setStatus("");
+    setErrMsg("");
 
-    const data = new FormData(formRef.current);
-    const name     = data.get("name")     || "";
-    const phone    = data.get("phone")    || "";
-    const city     = data.get("city")     || "";
-    const interest = data.get("interest") || "";
-    const message  = data.get("message")  || "";
-
-    const text =
-      `🥭 *New Order – AY BHATTI FARM Website*\n\n` +
-      `*Name:* ${name}\n` +
-      `*Phone:* ${phone}\n` +
-      `*City:* ${city}\n` +
-      `*Interest:* ${interest}\n` +
-      `*Message:* ${message}`;
-
-    const waNumber = business.whatsapp.replace(/\s/g, "");
-    const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`;
-
-    window.open(waUrl, "_blank", "noreferrer");
-    setStatus("success");
-    formRef.current.reset();
-    setSending(false);
+    try {
+      const result = await emailjs.sendForm(EJS_SERVICE, EJS_TEMPLATE, formRef.current, EJS_KEY);
+      console.log("EmailJS success:", result);
+      setStatus("success");
+      formRef.current.reset();
+    } catch (err) {
+      console.error("EmailJS error:", err);
+      const detail = err?.text || err?.message || JSON.stringify(err);
+      setErrMsg(detail);
+      setStatus("error");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -72,7 +73,7 @@ export default function Contact() {
             <SectionHeading
               eyebrow="Contact AY BHATTI FARM"
               title="Order fresh Multani mangoes or request a bulk quote"
-              text="Share your city, preferred variety and required quantity. WhatsApp is the fastest way to confirm seasonal availability."
+              text="Fill in your details and we'll get back to you shortly. For instant replies, use WhatsApp."
             />
 
             <div className="mt-12 grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
@@ -106,11 +107,10 @@ export default function Contact() {
                 transition={{ delay: 0.1 }}
                 className="rounded-[2rem] border border-orchard/10 bg-white p-6 shadow-premium sm:p-8"
               >
-                <input type="hidden" name="form-name" value="mango-inquiry" />
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Field label="Full Name" name="name" placeholder="Your name" required />
-                  <Field label="Phone Number" name="phone" type="tel" placeholder="+92..." required />
-                  <Field label="City" name="city" placeholder="Lahore, Karachi, Islamabad..." required />
+                  <Field label="Phone Number" name="phone" type="tel" placeholder="+92…" required />
+                  <Field label="City" name="city" placeholder="Lahore, Karachi, Islamabad…" required />
                   <label className="block">
                     <span className="form-label">Interest</span>
                     <select name="interest" className="form-field" defaultValue="Sindhri Mango">
@@ -132,13 +132,35 @@ export default function Contact() {
                     required
                   />
                 </label>
+
                 <Button type="submit" variant="dark" icon={Send} className="mt-6 w-full" disabled={sending}>
-                  {sending ? "Sending…" : "Send Order"}
+                  {sending ? "Sending…" : "Send Message"}
                 </Button>
+
                 {status === "success" && (
-                  <p className="mt-4 rounded-2xl bg-green-50 border border-green-200 px-4 py-3 text-sm font-bold text-green-700">
-                    ✅ WhatsApp opened with your order! Complete the chat to confirm.
-                  </p>
+                  <motion.p
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-4 rounded-2xl bg-green-50 border border-green-200 px-4 py-3 text-sm font-bold text-green-700"
+                  >
+                    ✅ Message sent! We'll get back to you on&nbsp;
+                    <span className="underline">{business.email}</span>&nbsp;shortly.
+                  </motion.p>
+                )}
+                {status === "error" && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-4 rounded-2xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700"
+                  >
+                    <p className="font-bold">❌ Email failed to send.</p>
+                    {errMsg && (
+                      <p className="mt-1 font-mono text-xs bg-red-100 rounded-lg px-2 py-1 break-all">{errMsg}</p>
+                    )}
+                    <p className="mt-2">Please try WhatsApp or email us at{" "}
+                      <a href={`mailto:${business.email}`} className="underline font-bold">{business.email}</a>
+                    </p>
+                  </motion.div>
                 )}
               </motion.form>
             </div>
