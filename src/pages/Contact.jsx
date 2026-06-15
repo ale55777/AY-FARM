@@ -44,49 +44,11 @@ export default function Contact() {
     setStatus("");
     setErrMsg("");
 
-    // Capture values before form reset
-    const data     = new FormData(formRef.current);
-    const name     = (data.get("name")     || "").trim();
-    const phone    = (data.get("phone")    || "").trim();
-    const city     = (data.get("city")     || "").trim();
-    const interest = (data.get("interest") || "").trim();
-    const message  = (data.get("message")  || "").trim();
-
     try {
       const result = await emailjs.sendForm(EJS_SERVICE, EJS_TEMPLATE, formRef.current, EJS_KEY);
       console.log("EmailJS success:", result);
       setStatus("success");
       formRef.current.reset();
-
-      // ── Auto WhatsApp confirmation to customer ────────────────
-      if (phone) {
-        const digits  = phone.replace(/\D/g, "");
-        const waPhone = digits.startsWith("92") ? digits
-                      : digits.startsWith("0")  ? "92" + digits.slice(1)
-                      : "92" + digits;
-
-        const autoReply =
-          `Assalam-o-Alaikum${name ? ` *${name}*` : ""}! 🥭\n\n` +
-          `✅ *Your inquiry has been received at AY BHATTI FARM.*\n\n` +
-          `📋 *Inquiry Summary:*\n` +
-          `• Order Interest: *${interest || "Not specified"}*\n` +
-          `• City: *${city || "Not specified"}*\n` +
-          (message ? `• Note: _${message}_\n` : "") +
-          `\n` +
-          `We will contact you shortly with pricing, availability and delivery details.\n\n` +
-          `جزاک اللہ خیرا 🌿\n` +
-          `_AY BHATTI FARM — Fresh Mangoes from Multan_`;
-
-        setTimeout(() => {
-          window.open(
-            `https://wa.me/${waPhone}?text=${encodeURIComponent(autoReply)}`,
-            "_blank",
-            "noreferrer"
-          );
-        }, 600);
-      }
-      // ─────────────────────────────────────────────────────────
-
     } catch (err) {
       console.error("EmailJS error:", err);
       const detail = err?.text || err?.message || JSON.stringify(err);
