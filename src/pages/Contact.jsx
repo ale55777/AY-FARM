@@ -44,11 +44,44 @@ export default function Contact() {
     setStatus("");
     setErrMsg("");
 
+    // Capture values before form reset
+    const data     = new FormData(formRef.current);
+    const name     = (data.get("name")     || "").trim();
+    const phone    = (data.get("phone")    || "").trim();
+    const interest = (data.get("interest") || "").trim();
+
     try {
       const result = await emailjs.sendForm(EJS_SERVICE, EJS_TEMPLATE, formRef.current, EJS_KEY);
       console.log("EmailJS success:", result);
       setStatus("success");
       formRef.current.reset();
+
+      // ── Auto WhatsApp reply to customer ──────────────────────
+      if (phone) {
+        // Normalise to international format (Pakistan default)
+        const digits   = phone.replace(/\D/g, "");
+        const waPhone  = digits.startsWith("92") ? digits
+                       : digits.startsWith("0")  ? "92" + digits.slice(1)
+                       : "92" + digits;
+
+        const autoReply =
+          `Assalam-o-Alaikum${name ? ` *${name}*` : ""}! 🥭\n\n` +
+          `Thank you for contacting *AY BHATTI FARM*. We have received your inquiry` +
+          `${interest ? ` regarding *${interest}*` : ""}.\n\n` +
+          `We will get back to you shortly with pricing, availability and delivery details.\n\n` +
+          `جزاک اللہ خیرا 🌿\n` +
+          `_AY BHATTI FARM — Fresh Mangoes from Multan_`;
+
+        setTimeout(() => {
+          window.open(
+            `https://wa.me/${waPhone}?text=${encodeURIComponent(autoReply)}`,
+            "_blank",
+            "noreferrer"
+          );
+        }, 600);
+      }
+      // ─────────────────────────────────────────────────────────
+
     } catch (err) {
       console.error("EmailJS error:", err);
       const detail = err?.text || err?.message || JSON.stringify(err);
@@ -143,8 +176,7 @@ export default function Contact() {
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-4 rounded-2xl bg-green-50 border border-green-200 px-4 py-3 text-sm font-bold text-green-700"
                   >
-                    ✅ Message sent! We'll get back to you on&nbsp;
-                    <span className="underline">{business.email}</span>&nbsp;shortly.
+                    ✅ Message sent to our inbox! WhatsApp is opening to send you an instant reply. 💬
                   </motion.p>
                 )}
                 {status === "error" && (
