@@ -15,6 +15,7 @@ import Button from "../components/Button.jsx";
 import SEO from "../components/SEO.jsx";
 import SectionHeading from "../components/SectionHeading.jsx";
 import WhatsAppCTA from "../components/WhatsAppCTA.jsx";
+import { useWhatsApp } from "../context/WhatsAppContext.jsx";
 import {
   business,
   faqs,
@@ -25,8 +26,7 @@ import {
   processSteps,
   quickCtas,
   stats,
-  testimonials,
-  whatsappLink
+  testimonials
 } from "../data/siteData.js";
 
 const fadeUp = {
@@ -123,9 +123,7 @@ function Hero() {
             Experience the authentic taste of Pakistan's finest mangoes directly from AY BHATTI FARM. Handpicked, naturally ripened and delivered fresh to your doorstep.
           </motion.p>
           <motion.div variants={fadeUp} className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button href={whatsappLink()} icon={MessageCircle} target="_blank" rel="noreferrer">
-              Order on WhatsApp
-            </Button>
+            <WAButton />
             <Button href="#collection" variant="outline" icon={ShoppingBasket}>
               Explore Mangoes
             </Button>
@@ -263,9 +261,7 @@ function MangoCard({ mango, reverse }) {
           </div>
 
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-            <Button href={whatsappLink(`Assalam-o-Alaikum, I want to order ${mango.title} from AY BHATTI FARM.`)} icon={MessageCircle} target="_blank" rel="noreferrer">
-              Order This Variety
-            </Button>
+            <WAButton interest={mango.title} />
             <Button href="/contact" variant="ghost" icon={ArrowRight}>
               Ask for Availability
             </Button>
@@ -323,6 +319,20 @@ function ComparisonSection() {
   );
 }
 
+/** Prominent green WhatsApp button that opens the global order modal */
+function WAButton({ interest } = {}) {
+  const { openModal } = useWhatsApp();
+  return (
+    <button
+      onClick={() => openModal(interest ? { interest } : {})}
+      className="relative flex items-center justify-center gap-2 overflow-hidden rounded-full bg-[#25D366] px-6 py-3 text-sm font-black text-white shadow-lg transition hover:bg-[#20bb5a] hover:shadow-[0_0_22px_rgba(37,211,102,0.5)] active:scale-95"
+    >
+      <span className="absolute inset-0 animate-ping rounded-full bg-[#25D366] opacity-20" style={{ animationDuration: "2.2s" }} />
+      <MessageCircle className="relative h-4 w-4" />
+      <span className="relative">{interest ? `Order ${interest}` : "Order on WhatsApp"}</span>
+    </button>
+  );
+}
 function Meter({ value }) {
   return (
     <div className="flex items-center gap-3">
